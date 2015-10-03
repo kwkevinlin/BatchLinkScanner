@@ -1,0 +1,24 @@
+{
+  "name": "Batch Link Scanner",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Highlight a block of text, and customize which links you want to click!",
+  "homepage_url": "http://linkevin.me",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/jquery-1.11.3.min.js", "js/popup.js"]
+    }
+  ]
+}
