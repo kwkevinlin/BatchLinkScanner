@@ -1,4 +1,4 @@
-# WillitRain
-Chrome Extension that notify users of possible rain on the following day. Never forget an umbrella again!
+# Batch Link Scanner
+A Chrome Extension that selectively opens URLs for highlighted text.
 
-Will it Rain? fetches from OpenWeatherMap's API, and notifies the user of possible raining in the next 36 hours. 
+The cure for Carpal Tunnel Syndrome! (just kidding)
