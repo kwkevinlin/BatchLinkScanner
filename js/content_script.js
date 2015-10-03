@@ -24,11 +24,20 @@ $(document).ready(function() {
             }
             console.log(html);
             //alert(html);
+            parseHTML(html);
         }
 
     });
 
 }); //End document.ready()
+
+function parseHTML(html) {
+    //Find href="
+    //substr till next "
+
+    var regex = html.match(/href\n*=\n*".*?"/g);
+    console.log(html.match(regex));
+}
 
 
 
