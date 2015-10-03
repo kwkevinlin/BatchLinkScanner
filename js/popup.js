@@ -1,37 +1,25 @@
-//All code in background.js
+//"Options" page, instead of using options.html
 
 $(document).ready(function() {
 
 	//Retrieve when document.ready
 	var radioVal;
-	chrome.storage.sync.get(radioSettings, function (val) {
-    	console.log(val);
-    	$("input[name=radioSettings][value=" + val + "]").attr('checked', 'checked');
+	chrome.storage.sync.get(null, function (val) {
+    	console.log("Retrieve: ", val.radioSettings);
+    	$("#" + val.radioSettings).attr("checked", true);
 	});
-	//Check console to see if error
-	//After that, finish regex
+	//Finish regex
 
 	//Auto save settings after change
 	$('input:radio[name=radioSettings]').click(function() { 
-		var radioSettings = $('input:radio[name=radioSettings]:checked').val(); 
-		save_options(radioSettings);
+		var radioSettings = $('input:radio[name=radioSettings]:checked').attr('id'); 
+		console.log("Saving: ", radioSettings);
+
+		chrome.storage.sync.set({
+			"radioSettings": radioSettings
+		});
+
 	}); 
-
-	/*
-	$("#boolAll").change(function () {
-	});
-
-	$("#boolFirst").change(function () {
-	});
-
-	$("#boolLast").change(function () {
-	});
-	*/
 
 });
 
-function save_options(opt) {
-	chrome.storage.sync.set({
-		radioSettings: opt
-	});
-}
