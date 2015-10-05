@@ -1,3 +1,6 @@
+/* StackOverflow Question:
+    http://stackoverflow.com/questions/32928598/extract-url-from-html-text-but-if-url-only-shows-partial-like-secondpage-html
+*/
 
 //When Document Ready
 $(document).ready(function() {
@@ -37,6 +40,22 @@ function parseHTML(html) {
 
     var regex = html.match(/href\n*=\n*".*?"/g);
     console.log(html.match(regex));
+
+    /* 
+        # Open to suggestions on this part #
+
+        HTML parsers seem ideal, but they wouldn't solve the "missing domain-name.tld" issue, right?
+        For ex: <a href="/secondpage.html">visit second page</a>
+
+        Check for 3 cases:
+        1). Complete URL: Protocol://domain-name.tld
+        2). Missing domain-name.tld
+        3). (No protocol is fine, right?)
+    */
+
+
+
+    
 }
 
 
