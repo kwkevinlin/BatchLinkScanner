@@ -26,7 +26,6 @@ $(document).ready(function() {
                 }
             }
             console.log(html);
-            //alert(html);
             parseHTML(html);
         }
 
@@ -38,8 +37,15 @@ function parseHTML(html) {
     //Find href="
     //substr till next "
 
-    var regex = html.match(/href\n*=\n*".*?"/g);
-    console.log(html.match(regex));
+    //href regex to find all URL occurences
+    var regex = /href\n*=\n*".*?(?=")/g;
+    var urlArr = html.match(regex);
+    //Lookahead not present in JavaScript (?)
+    for (var i = 0; i < urlArr.length; i++) {
+        urlArr[i] = urlArr[i].substring(6);
+    }
+    console.log(urlArr);
+
 
     /* 
         # Open to suggestions on this part #
@@ -51,6 +57,13 @@ function parseHTML(html) {
         1). Complete URL: Protocol://domain-name.tld
         2). Missing domain-name.tld
         3). (No protocol is fine, right?)
+
+        NEW:
+        1). Get url of current page
+        2). Turn into regex. if no match, concat. Else (if present), go directly
+        var domain = new URL(pageUrl).hostname; 
+        return:
+        images.google.com
     */
 
 
