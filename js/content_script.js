@@ -46,24 +46,28 @@ function parseHTML(html) {
     }
     console.log(urlArr);
 
+    var domain = new URL(window.location.href).hostname; 
+    console.log(domain);
+
+    //Currently selecting last URL highlighted
+    if (urlArr[urlArr.length-1].indexOf(domain) == -1) { //URL not present. 
+        /*  Could mean two cases:
+            1. Linking to external page
+            2. Linking to same page, just without domain.tld
+
+            http://stackoverflow.com/questions/2910946/test-if-links-are-external-with-jquery-javascript
+        */
+
+        console.log("Not present");
+    } else {
+        console.log("URL Present");
+    }
+
 
     /* 
-        # Open to suggestions on this part #
-
-        HTML parsers seem ideal, but they wouldn't solve the "missing domain-name.tld" issue, right?
-        For ex: <a href="/secondpage.html">visit second page</a>
-
-        Check for 3 cases:
-        1). Complete URL: Protocol://domain-name.tld
-        2). Missing domain-name.tld
-        3). (No protocol is fine, right?)
-
-        NEW:
-        1). Get url of current page
-        2). Turn into regex. if no match, concat. Else (if present), go directly
-        var domain = new URL(pageUrl).hostname; 
-        return:
-        images.google.com
+        Corner case 1:
+        If #, anchor, so append to current URL
+            Or just ignore?
     */
 
 
