@@ -13,8 +13,12 @@
     "default_icon": "icons/icon19.png",
     "default_popup": "popup.html"
   },
+  "background": {
+    "scripts": ["js/background.js"]
+  },
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "content_scripts": [
     {

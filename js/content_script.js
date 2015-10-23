@@ -34,33 +34,55 @@ $(document).ready(function() {
 }); //End document.ready()
 
 function parseHTML(html) {
-    //Find href="
-    //substr till next "
 
     //href regex to find all URL occurences
     var regex = /href\n*=\n*".*?(?=")/g;
     var urlArr = html.match(regex);
-    //Lookahead not present in JavaScript (?)
+    if (urlArr === null) //End early if no URLs highlighted
+        return;
+
+    //Retreiving settings from chrome storage
+    //Message passing to background.js required because content_script cant run a lot of chrome APIs
+    chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
+        console.log(response.data);
+        console.log("This doesn't print either");
+    });
+
+    //No lookahead in JavaScript?
     for (var i = 0; i < urlArr.length; i++) {
         urlArr[i] = urlArr[i].substring(6);
     }
     console.log(urlArr);
 
     var domain = new URL(window.location.href).hostname; 
-    console.log(domain);
+    //console.log(domain);
+
+    /*  Could mean two cases:
+        1. Linking to external page
+        2. Linking to same page, just without domain.tld
+
+        http://stackoverflow.com/questions/2910946/test-if-links-are-external-with-jquery-javascript
+        var comp = new RegExp('^' + location.protocol + '//' + location.host);
+
+        Even easier?
+        1. / means relative
+        2. [blank] means replace domain.tld/r/test.html to domain.tld/r/[whatever]
+        3. # means anchor, append to current URL
+        4. Else, just go?
+
+        Current approach:
+        Possible issue: If current URL also contains domain.tld within URL
+    */
 
     //Currently selecting last URL highlighted
-    if (urlArr[urlArr.length-1].indexOf(domain) == -1) { //URL not present. 
-        /*  Could mean two cases:
-            1. Linking to external page
-            2. Linking to same page, just without domain.tld
+    if (urlArr[urlArr.length-1].indexOf(domain) != -1) { //URL not present. 
 
-            http://stackoverflow.com/questions/2910946/test-if-links-are-external-with-jquery-javascript
-        */
+        console.log("Internal");
 
-        console.log("Not present");
+        //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
     } else {
-        console.log("URL Present");
+        console.log("External");
+        //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
     }
 
 
