@@ -27,14 +27,14 @@ $(document).ready(function() {
 
     });
 
-}); //End document.ready()
+});
 
 function parseHTML(html) {
 
     //href regex to find all URL occurences
     var regex = /href\n*=\n*".*?(?=")/g;
     var urlArr = html.match(regex);
-    if (urlArr === null) //End early if no URLs highlighted
+    if (urlArr === null)
         return;
 
     //No lookahead in JavaScript?
@@ -49,36 +49,53 @@ function parseHTML(html) {
 
     /* Retreiving settings from chrome storage
        Message passing to background.js required because content_script cant run a lot of chrome APIs */
-    var urlToOpen;
     chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
         console.log(response.data);
         console.log("This doesn't print either");
 
-        if (response.data == "boolFirst")
-            urlToOpen = urlArr[0];
-        else if (response.data == "boolLast")
-            urlToOpen = urlArr[urlArr.length-1];
-        else if (response.data == "boolAll")
-            urlToOpen = "boolAll"
+        if (response.data == "boolFirst") {
+            openURL(urlArr[0], domain);
+        }
+        else if (response.data == "boolLast") {
+            openURL(urlArr[urlArr.length-1, domain);
+        }
+        else if (response.data == "boolAll") {
+            openURL(urlArr, domain);
+        }
         else 
             console.log("Error in urlToOpen");
     
-        /* Bad practice throwing everything into callback? */
-        
-        //Selecting last URL highlighted for testing
-        if (urlArr[urlArr.length-1].indexOf(domain) != -1) {
+        /* Bad practice to throw everything into callback? */ 
+        /* Even worse practice to nest functions so hard? */      
 
-            console.log("Internal");
-            //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
+    }); 
+}
 
-        } else {
+function openURL(urlToOpen, domain) {
 
-            console.log("External");
-            //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
-
+    /* boolAll */
+    if (urlToOpen.isArray()) {
+        /* HARD LIMIT 5 for test */
+        for (var i = 0; i < 5; i++) {
+            if (urlToOpen[i].indexOf(domain) != -1) { //Internal
+                //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
+                //Or use chrome.tabs.create
+            } else { //External
+                //Test other 3 cases
+            }
         }
+    }
+    /* boolFirst and boolLast */
+    else { 
+        if (urlToOpen.indexOf(domain) != -1) { //Internal
+            //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
+            //Or use chrome.tabs.create
+        } else { //External
+            //Test other 3 cases
+        }
+    }
 
-    }); //End sendMessage
+
 }
 
 
@@ -98,4 +115,7 @@ function parseHTML(html) {
     Current approach:
     Possible issue: If current URL also contains domain.tld within URL
         Fix: Append location.protocol as well?
+
+    Additional To-Do:
+    Settings in popup.html: if over 5 links selected, continue? User set to max limit
 */
