@@ -50,14 +50,13 @@ function parseHTML(html) {
     /* Retreiving settings from chrome storage
        Message passing to background.js required because content_script cant run a lot of chrome APIs */
     chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
-        console.log(response.data);
-        console.log("This doesn't print either");
+        console.log("Message response: " + response.data);
 
         if (response.data == "boolFirst") {
             openURL(urlArr[0], domain);
         }
         else if (response.data == "boolLast") {
-            openURL(urlArr[urlArr.length-1, domain);
+            openURL(urlArr[urlArr.length-1], domain);
         }
         else if (response.data == "boolAll") {
             openURL(urlArr, domain);
