@@ -95,8 +95,26 @@ function openURL(urlToOpen, domain) {
         } else { //External
             //Test other 3 cases
             console.log("External, First/Last");
+            if (urlToOpen[0] == '/') { //Relative URL, ie: /secondPage.html
+                console.log("Relative URL, opening tab for: " + domain + urlToOpen[0]);
+            }
+            else if (urlToOpen[0] == '#') { //Anchor, ie: #tableofcontent
+                console.log("Anchor, opening tab for: " + window.location.href);
+            }
+            else if (urlToOpen[0].indexOf('http://') === 0 || urlToOpen[0].indexOf('https://') === 0) { //File, ie: #document.pdf
+                if (urlToOpen[0].indexOf('/') == -1) //Does not contain '/'
+                    console.log("File (DNE), opening tab for: " + domain + urlToOpen[0]);
+                else //Is not at root level
+                    console.log("File (contains '/'), opening tab for: " + urlToOpen[0].substr(urlToOpen[0].lastIndexOf('/') + 1));
+            }
+            else
+                console.log("Else, opening tab for: " + urlToOpen[0]);
         }
     }
+
+    /*
+        File cases only test for http/https. Viable option?
+    */
 
 
 }
