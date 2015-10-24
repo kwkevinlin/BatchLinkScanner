@@ -50,7 +50,7 @@ function parseHTML(html) {
     /* Retreiving settings from chrome storage
        Message passing to background.js required because content_script cant run a lot of chrome APIs */
     chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
-        console.log("Message response: " + response.data);
+        //console.log("Message response: " + response.data);
 
         if (response.data == "boolFirst") {
             openURL(urlArr[0], domain);
@@ -73,14 +73,16 @@ function parseHTML(html) {
 function openURL(urlToOpen, domain) {
 
     /* boolAll */
-    if (urlToOpen.isArray()) {
+    if (urlToOpen.constructor === Array) {
         /* HARD LIMIT 5 for test */
         for (var i = 0; i < 5; i++) {
             if (urlToOpen[i].indexOf(domain) != -1) { //Internal
                 //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
                 //Or use chrome.tabs.create
+                console.log("Internal, boolAll");
             } else { //External
                 //Test other 3 cases
+                console.log("External, boolAll");
             }
         }
     }
@@ -89,8 +91,10 @@ function openURL(urlToOpen, domain) {
         if (urlToOpen.indexOf(domain) != -1) { //Internal
             //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
             //Or use chrome.tabs.create
+            console.log("Internal, First/Last");
         } else { //External
             //Test other 3 cases
+            console.log("External, First/Last");
         }
     }
 
