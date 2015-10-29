@@ -3,7 +3,8 @@ chrome.runtime.onInstalled.addListener( function(details) {
     if (details.reason == "install") {
         console.log("Configuring user settings on first time install.");
         chrome.storage.sync.set({
-            "radioSettings": "boolLast"
+            "radioLinkSetting": "boolLast",
+            "radioWindowSetting": "currentTab"
         });
     }
 });
@@ -12,7 +13,7 @@ chrome.runtime.onInstalled.addListener( function(details) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.method == "getSettings") {
     	chrome.storage.sync.get(null, function (val) {
-            sendResponse({data: val.radioSettings}); 
+            sendResponse({data: val.radioLinkSetting}); 
     	});
     }
     return true;

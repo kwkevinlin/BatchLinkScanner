@@ -56,7 +56,7 @@ function parseHTML(html) {
             openURL(urlArr[0], domain);
         }
         else if (response.data == "boolLast") {
-            openURL(urlArr[urlArr.length-1], domain);
+            openURL(urlArr[urlArr.length-1], domain); //Check for empty case?
         }
         else if (response.data == "boolAll") {
             openURL(urlArr, domain);
@@ -75,6 +75,7 @@ function openURL(urlToOpen, domain) {
     /* boolAll */
     if (urlToOpen.constructor === Array) {
         /* HARD LIMIT 5 for test */
+        /*
         for (var i = 0; i < 5; i++) {
             if (urlToOpen[i].indexOf(domain) != -1) { //Internal
                 //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
@@ -85,6 +86,7 @@ function openURL(urlToOpen, domain) {
                 console.log("External, boolAll");
             }
         }
+        */ 
     }
     /* boolFirst and boolLast */
     else { 
@@ -95,25 +97,43 @@ function openURL(urlToOpen, domain) {
         } else { //External
             //Test other 3 cases
             console.log("External, First/Last");
-            if (urlToOpen[0] == '/') { //Relative URL, ie: /secondPage.html
-                console.log("Relative URL, opening tab for: " + domain + urlToOpen[0]);
+            console.log("First: " + urlToOpen.charAt(0));
+            if (urlToOpen.charAt(0) == '/') { //Relative URL, ie: /secondPage.html
+                console.log("Relative URL, opening tab for: " + urlToOpen);
+                //window.open(urlToOpen);
+                window.open(urlToOpen, "_self");
+
+                //Relative is fixed, others not yet
+                //For some reason, DONT need domain name (automatic). Check other cases then.
+                //Error: accidentally highlight = will open. option for diff buttons?
+                //Blank ctrl clicks gets counted. return statement?
             }
-            else if (urlToOpen[0] == '#') { //Anchor, ie: #tableofcontent
+            else if (urlToOpen.charAt(0) == '#') { //Anchor, ie: #tableofcontent
                 console.log("Anchor, opening tab for: " + window.location.href);
             }
-            else if (urlToOpen[0].indexOf('http://') === 0 || urlToOpen[0].indexOf('https://') === 0) { //File, ie: #document.pdf
-                if (urlToOpen[0].indexOf('/') == -1) //Does not contain '/'
-                    console.log("File (DNE), opening tab for: " + domain + urlToOpen[0]);
-                else //Is not at root level
-                    console.log("File (contains '/'), opening tab for: " + urlToOpen[0].substr(urlToOpen[0].lastIndexOf('/') + 1));
+            // === 0 to == -1
+            else if (urlToOpen.indexOf('http://') != -1 || urlToOpen.indexOf('https://') != -1) { //. Doesnt start with http/https
+                console.log("Else, opening tab for: " + urlToOpen);
+                window.open(urlToOpen,"_self");
             }
-            else
-                console.log("Else, opening tab for: " + urlToOpen[0]);
+            else {
+                //File, ie: #document.pdf
+                if (urlToOpen.indexOf('/') == -1) { //Does not contain '/', directly from root. Is this href type even possible?
+                    console.log("File (DNE), opening tab for: " + domain + urlToOpen);
+                }
+                else { //Is not at root level
+                    console.log("File (contains '/'), opening tab for: " + urlToOpen.substr(urlToOpen.lastIndexOf('/') + 1));
+                }
+                
+            }
         }
     }
 
     /*
         File cases only test for http/https. Viable option?
+        README:
+            Uncomment
+            charAt(). What's in [0] then, why NEED it? Passing in wrong?
     */
 
 
