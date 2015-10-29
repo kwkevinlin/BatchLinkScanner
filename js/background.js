@@ -13,7 +13,8 @@ chrome.runtime.onInstalled.addListener( function(details) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.method == "getSettings") {
     	chrome.storage.sync.get(null, function (val) {
-            sendResponse({data: val.radioLinkSetting}); 
+            sendResponse({linkChoice: val.radioLinkSetting,
+                          windowChoice: val.radioWindowSetting}); 
     	});
     }
     return true;

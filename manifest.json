@@ -2,7 +2,7 @@
   "name": "Batch Link Scanner",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Highlight a block of text, and customize which links you want to click!",
+  "description": "Highlight a block of text, and customize what links you want to open automatically!",
   "homepage_url": "http://linkevin.me",
   "icons": {
     "16": "icons/icon16.png",

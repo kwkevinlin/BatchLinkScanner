@@ -44,25 +44,28 @@ function parseHTML(html) {
     console.log(urlArr);
 
     //Retreive domain.tld
-    var domain = new URL(window.location.href).hostname; 
+    //var domain = new URL(window.location.href).hostname; 
     //console.log(domain);
 
     /* Retreiving settings from chrome storage
        Message passing to background.js required because content_script cant run a lot of chrome APIs */
     chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
-        //console.log("Message response: " + response.data);
+        //console.log("Message response: ", response);
 
-        if (response.data == "boolFirst") {
-            openURL(urlArr[0], domain);
+        if (response.linkChoice == "boolFirst") {
+            console.log("sendMessage Response: " + response.windowChoice);
+            openURL(urlArr[0], response.windowChoice);
         }
-        else if (response.data == "boolLast") {
-            openURL(urlArr[urlArr.length-1], domain); //Check for empty case?
+        else if (response.linkChoice == "boolLast") {
+            console.log("sendMessage Response: " + response.windowChoice);
+            openURL(urlArr[urlArr.length-1], response.windowChoice); //Check for empty case?
         }
-        else if (response.data == "boolAll") {
-            openURL(urlArr, domain);
+        else if (response.linkChoice == "boolAll") {
+            console.log("sendMessage Response: " + response.windowChoice);
+            openURL(urlArr, response.windowChoice);
         }
         else 
-            console.log("Error in urlToOpen");
+            console.log("Error in urlToOpen (linkChoice): " + response.linkChoice + ", " + response.windowChoice);
     
         /* Bad practice to throw everything into callback? */ 
         /* Even worse practice to nest functions so hard? */      
@@ -70,72 +73,42 @@ function parseHTML(html) {
     }); 
 }
 
-function openURL(urlToOpen, domain) {
+function openURL(urlToOpen, linkSettings) {
+
+    console.log("urlToOpen: ", urlToOpen);
 
     /* boolAll */
     if (urlToOpen.constructor === Array) {
         /* HARD LIMIT 5 for test */
-        /*
-        for (var i = 0; i < 5; i++) {
-            if (urlToOpen[i].indexOf(domain) != -1) { //Internal
-                //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
-                //Or use chrome.tabs.create
-                console.log("Internal, boolAll");
-            } else { //External
-                //Test other 3 cases
-                console.log("External, boolAll");
-            }
+        if (urlToOpen.length > 4) {
+            if (!confirm("You are opening 5 links at once. Press OK to proceed."))
+                return;
         }
-        */ 
+
+        for (var i = 0; i < urlToOpen.length; i++) {
+            console.log("Opening: " + urlToOpen[i]);
+            if (linkSettings == "newTab")
+                window.open(urlToOpen[i]);
+            else
+                window.open(urlToOpen[i], "_self");
+        }
+
+        //Check for anchor case. Many anchor links opening in same tab will only go to last one
+
     }
     /* boolFirst and boolLast */
     else { 
-        if (urlToOpen.indexOf(domain) != -1) { //Internal
-            //window.open(urlArr[urlArr.length-1]); //Opens hidden in new tab
-            //Or use chrome.tabs.create
-            console.log("Internal, First/Last");
-        } else { //External
-            //Test other 3 cases
-            console.log("External, First/Last");
-            console.log("First: " + urlToOpen.charAt(0));
-            if (urlToOpen.charAt(0) == '/') { //Relative URL, ie: /secondPage.html
-                console.log("Relative URL, opening tab for: " + urlToOpen);
-                //window.open(urlToOpen);
-                window.open(urlToOpen, "_self");
 
-                //Relative is fixed, others not yet
-                //For some reason, DONT need domain name (automatic). Check other cases then.
-                //Error: accidentally highlight = will open. option for diff buttons?
-                //Blank ctrl clicks gets counted. return statement?
-            }
-            else if (urlToOpen.charAt(0) == '#') { //Anchor, ie: #tableofcontent
-                console.log("Anchor, opening tab for: " + window.location.href);
-            }
-            // === 0 to == -1
-            else if (urlToOpen.indexOf('http://') != -1 || urlToOpen.indexOf('https://') != -1) { //. Doesnt start with http/https
-                console.log("Else, opening tab for: " + urlToOpen);
-                window.open(urlToOpen,"_self");
-            }
-            else {
-                //File, ie: #document.pdf
-                if (urlToOpen.indexOf('/') == -1) { //Does not contain '/', directly from root. Is this href type even possible?
-                    console.log("File (DNE), opening tab for: " + domain + urlToOpen);
-                }
-                else { //Is not at root level
-                    console.log("File (contains '/'), opening tab for: " + urlToOpen.substr(urlToOpen.lastIndexOf('/') + 1));
-                }
-                
-            }
-        }
+        console.log("Opening: " + urlToOpen);
+        if (linkSettings == "newTab")
+            window.open(urlToOpen);
+        else
+            window.open(urlToOpen, "_self");
+
+        //Error: accidentally highlight = will open. option for diff buttons?
+        //Blank ctrl clicks gets counted. return statement?
+
     }
-
-    /*
-        File cases only test for http/https. Viable option?
-        README:
-            Uncomment
-            charAt(). What's in [0] then, why NEED it? Passing in wrong?
-    */
-
 
 }
 
