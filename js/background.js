@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener( function(details) {
         console.log("Configuring user settings on first time install.");
         chrome.storage.sync.set({
             "radioLinkSetting": "boolLast",
-            "radioWindowSetting": "currentTab"
+            "radioWindowSetting": "newTab"
         });
     }
 });
