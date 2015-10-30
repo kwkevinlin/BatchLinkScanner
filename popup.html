@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Batch Link Scanner</title>
-	<!--<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>-->
 	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/popup.js"></script>
@@ -17,6 +16,13 @@
     		font-family: 'Open Sans', sans-serif;
     		font-weight: 200;
 			font-size: 14px;
+		}
+		.dropdown-menu {
+			left: 50%;
+			right: auto;
+			text-align: center;
+			transform: translate(-50%, 0);
+			background-color: #eee;
 		}
 	</style>
 </head>
@@ -42,17 +48,16 @@
 				</div> <!-- col div -->
 				<div class="col-xs-6">
 					<div class="dropdown">
-						<p>Open Warning Dialog when more than:
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin: 5px">
+						<p>Open Warning Dialog when more than:</p>
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
 								Number of Links<span class="caret"></span></button>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu pull-center">
 								<li><a href="#">5</a></li>
 							    <li><a href="#">10</a></li>
 							    <li><a href="#">Unlimited!</a></li>
 						 	</ul>
-		
-						</p>
 					</div>
+
 				</div> <!-- col div -->
 			</div> <!-- row div -->
 
