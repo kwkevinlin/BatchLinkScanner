@@ -43,26 +43,21 @@ function parseHTML(html) {
     }
     console.log(urlArr);
 
-    //Retreive domain.tld
-    //var domain = new URL(window.location.href).hostname; 
-    //console.log(domain);
-
     /* Retreiving settings from chrome storage
        Message passing to background.js required because content_script cant run a lot of chrome APIs */
     chrome.runtime.sendMessage({method: "getSettings"}, function(response) {
-        //console.log("Message response: ", response);
 
         if (response.linkChoice == "boolFirst") {
             console.log("sendMessage Response: " + response.windowChoice);
-            openURL(urlArr[0], response.windowChoice);
+            openURL(urlArr[0], response.windowChoice, response.warningChoice);
         }
         else if (response.linkChoice == "boolLast") {
             console.log("sendMessage Response: " + response.windowChoice);
-            openURL(urlArr[urlArr.length-1], response.windowChoice); //Check for empty case?
+            openURL(urlArr[urlArr.length-1], response.windowChoice, response.warningChoice); //Check for empty case?
         }
         else if (response.linkChoice == "boolAll") {
             console.log("sendMessage Response: " + response.windowChoice);
-            openURL(urlArr, response.windowChoice);
+            openURL(urlArr, response.windowChoice, response.warningChoice);
         }
         else 
             console.log("Error in urlToOpen (linkChoice): " + response.linkChoice + ", " + response.windowChoice);
@@ -73,18 +68,21 @@ function parseHTML(html) {
     }); 
 }
 
-function openURL(urlToOpen, linkSettings) {
+function openURL(urlToOpen, linkSettings, warningChoice) {
 
-    console.log("urlToOpen: ", urlToOpen);
+    console.log("urlToOpen: ", urlToOpen, ", warningChoice: ", warningChoice);
 
     /* boolAll */
     if (urlToOpen.constructor === Array) {
-        /* HARD LIMIT 5 for test */
-        if (urlToOpen.length > 4) {
-            if (!confirm("You are opening 5 links at once. Press OK to proceed."))
-                return;
+        // Warn user if warningChoice is "5" or "10" links
+        if (urlToOpen.length >= parseInt(warningChoice, 10)) {
+            if (warningChoice != "10000") { //10000 == "Do Not Warn"
+                if (!confirm("You are opening " + warningChoice + " links at once. Press OK to proceed."))
+                    return;
+            }
         }
 
+        //Open all links
         for (var i = 0; i < urlToOpen.length; i++) {
             console.log("Opening: " + urlToOpen[i]);
             if (linkSettings == "newTab")
@@ -92,8 +90,6 @@ function openURL(urlToOpen, linkSettings) {
             else
                 window.open(urlToOpen[i], "_self");
         }
-
-        //Check for anchor case. Many anchor links opening in same tab will only go to last one
 
     }
     /* boolFirst and boolLast */
@@ -111,25 +107,3 @@ function openURL(urlToOpen, linkSettings) {
     }
 
 }
-
-
-/*  Extracted URL could mean two cases:
-    1. Linking to external page
-    2. Linking to same page, just without domain.tld
-
-    http://stackoverflow.com/questions/2910946/test-if-links-are-external-with-jquery-javascript
-    var comp = new RegExp('^' + location.protocol + '//' + location.host);
-
-    Internal Linking Cases:
-    1. / means relative
-    2. [blank] means replace domain.tld/r/test.html to domain.tld/r/[whatever]
-    3. # means anchor, append to current URL
-    4. Else, just go?
-
-    Current approach:
-    Possible issue: If current URL also contains domain.tld within URL
-        Fix: Append location.protocol as well?
-
-    Additional To-Do:
-    Settings in popup.html: if over 5 links selected, continue? User set to max limit
-*/
