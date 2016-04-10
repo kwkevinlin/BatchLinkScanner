@@ -30,7 +30,8 @@
 	<div align="center" style="width:460px; height: 255px;"> <!-- 225 225 -->
 		<h1 style="margin-bottom: 15px; border-bottom: 5px solid #57c4d0; display: inline-block; width:85%">Batch Link Scanner</h1>
 		<div class="container-fluid">
-			<div class="row">
+			<div class="row" style="margin: 0 auto; text-align: left;">
+			<!-- http://stackoverflow.com/questions/1774477/centre-aligned-div-that-has-text-aligned-to-the-left -->
 				<div class="col-xs-6">
 					<div class="divRadios">
 						<p>Open Highlighted URLs for:
@@ -47,21 +48,23 @@
 					</div>
 				</div> <!-- col div -->
 				<div class="col-xs-6">
-					<div class="dropdown">
-						<p>Open Warning Dialog when more than:</p>
-							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-								Number of Links<span class="caret"></span></button>
-							<ul class="dropdown-menu pull-center">
-								<li><a href="#">5</a></li>
-							    <li><a href="#">10</a></li>
-							    <li><a href="#">Unlimited!</a></li>
-						 	</ul>
+					<div class="divRadios">
+						<p>Open Warning Dialog when Selected Links Exceed:
+							<div class="radio">
+			  					<label><input type="radio" id="five" name="radioWarningSetting">5 URLs</label>
+							</div>
+							<div class="radio">
+			  					<label><input type="radio" id="ten" name="radioWarningSetting">10 URLs</label>
+							</div>
+							<div class="radio">
+			  					<label><input type="radio" id="unlimited" name="radioWarningSetting">Do Not Warn</label>
+							</div>
+						</p>
 					</div>
-
 				</div> <!-- col div -->
 			</div> <!-- row div -->
 
-			<div class="row">
+			<div class="row" style="margin: 0 auto; text-align: left;">
 
 				<div class="col-xs-6">
 					<div class="divRadios">
@@ -84,3 +87,5 @@
 
 </body>
 </html>
+
+<!-- Output links to new tab? -->
