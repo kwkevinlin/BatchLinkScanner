@@ -15,6 +15,21 @@ $(document).ready(function() {
 		chrome.storage.sync.set({
 			"radioLinkSetting": radioLinkSetting
 		});
+		console.log("Highlighted option changed!");
+
+		/* Gray out unavailable options 
+
+		   Fix this: Options are not being grayed out.
+		             Or change UI layout?
+		*/
+		//If "All Links" selected, "Current Tab" should not be selectable option
+		if ($('input:radio[name=radioLinkSetting]:checked').attr('id') == "boolAll") {
+			$('newTab').disabled = false;
+			$('currentTab').disabled = true;
+		} else {
+			$('newTab').disabled = true;
+			$('currentTab').disabled = false;
+		}
 	}); 
 	$('input:radio[name=radioWindowSetting]').click(function() { 
 		var radioWindowSetting = $('input:radio[name=radioWindowSetting]:checked').attr('id'); 
