@@ -17,18 +17,14 @@ $(document).ready(function() {
 		});
 		console.log("Highlighted option changed!");
 
-		/* Gray out unavailable options 
-
-		   Fix this: Options are not being grayed out.
-		             Or change UI layout?
-		*/
+		//Gray out unavailable options 
 		//If "All Links" selected, "Current Tab" should not be selectable option
 		if ($('input:radio[name=radioLinkSetting]:checked').attr('id') == "boolAll") {
-			$('newTab').disabled = false;
-			$('currentTab').disabled = true;
+			$('#newTab').prop("checked", true);
+			$('#currentTab').attr('disabled', true);
 		} else {
-			$('newTab').disabled = true;
-			$('currentTab').disabled = false;
+			$('#newTab').attr('disabled', false);
+			$('#currentTab').attr('disabled', false);
 		}
 	}); 
 	$('input:radio[name=radioWindowSetting]').click(function() { 
